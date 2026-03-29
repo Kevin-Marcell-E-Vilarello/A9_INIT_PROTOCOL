@@ -10,3 +10,14 @@
 * **DESCRIPTION:** Session files found in 01_SESSIONS root; shell attempted to execute raw output as commands.
 * **REMEDY:** Relocate files to Canonical SESSION_ID path; flush terminal buffer.
 © 2026 Kevin Marcell Escalona Vilarello™
+[2026-03-28_2154] !! LATTICE_DRIFT_DETECTION™ !!
+* **ERROR_ID:** ERR_003_MIRROR_WRITE_LOCK
+* **DESCRIPTION:** 'cp' failed to overwrite .git objects in GoogleDrive due to permission locks.
+* **REMEDY:** Use 'rsync' with permission-ignore or manual deletion of the target mirror before re-sync.
+© 2026 Kevin Marcell Escalona Vilarello™
+[2026-03-28_2156] !! LATTICE_DRIFT_DETECTION™ !!
+* **ERROR_ID:** ERR_004_REMOTE_AUTH_LOCK
+* **DESCRIPTION:** GitHub Push suspended due to forgotten credentials.
+* **RESULT:** Local Canon (Desktop) and AI-Context (Drive) are Synced. Cloud (GitHub) is Pending.
+* **REMEDY:** Reset GitHub password or generate Personal Access Token (PAT) in next session.
+© 2026 Kevin Marcell Escalona Vilarello™
