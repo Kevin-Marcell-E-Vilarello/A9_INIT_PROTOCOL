@@ -1,3 +1,11 @@
+=================================
+SYMBLA_SEED_BLOCK
+SEED_TYPE: PROTOCOL_SEED
+SEED_SCHEMA_VERSION: SYMBLA_SEED_1.1_HARDENED
+SEED_STATUS: STABLE_CANON
+
+EOF_BOUNDARY: TRUE
+=================================
 {
   "SYMBLA_LAB_PROTOCOL_SEED": {
     "SEED_ID": "UNIOS_LAB_PROTOCOL_V1.1_HARDENED",
@@ -116,7 +124,155 @@
         "what did we do",
         "what happened",
         "how did it happen"
-      ]
+      ],
+      "NARRATIVE_ROLE": "explain the reasoning, purpose, and meaning of the experiment",
+      "NUMERICAL_ROLE": "preserve measurable output, counts, steps, differences, bounds, cycles, and other hard evidence"
+    },
+    "DOCUMENT_FLOW_STANDARD": [
+      {
+        "FILE": "README.md",
+        "ROLE": "identity card for the test"
+      },
+      {
+        "FILE": "theory.md",
+        "ROLE": "hypothesis, purpose, scientific role, conceptual framing"
+      },
+      {
+        "FILE": "test_design.md",
+        "ROLE": "how the experiment is executed (includes DELTA notes from source-of-truth and Resource Guards)"
+      },
+      {
+        "FILE": "script.py",
+        "ROLE": "executable form of the experiment"
+      },
+      {
+        "FILE": "results_raw.txt",
+        "ROLE": "raw output captured from execution (must include ID Potency header and Env Metadata)"
+      },
+      {
+        "FILE": "results_observed.md",
+        "ROLE": "measured behavior only"
+      },
+      {
+        "FILE": "conclusion.md",
+        "ROLE": "interpretation grounded in numerical evidence"
+      },
+      {
+        "FILE": "linked_tests.md",
+        "ROLE": "relations to previous and future tests"
+      }
+    ],
+    "FILE_RULES": {
+      "README.md": {
+        "MUST_INCLUDE": [
+          "test ID",
+          "test title",
+          "session ID",
+          "purpose",
+          "status",
+          "core question",
+          "document set",
+          "next links when applicable"
+        ]
+      },
+      "theory.md": {
+        "MUST_INCLUDE": [
+          "theoretical role",
+          "working hypothesis",
+          "why this test matters",
+          "interpretive caution if needed"
+        ],
+        "MUST_NOT_INCLUDE": [
+          "raw results",
+          "final conclusions"
+        ]
+      },
+      "test_design.md": {
+        "MUST_INCLUDE_WHEN_APPLICABLE": [
+          "lattice or system size",
+          "initial conditions or seeds",
+          "boundary conditions",
+          "update rule",
+          "parameters",
+          "measurement method",
+          "comparison logic",
+          "evaluation standard",
+          "SOURCE_DELTA: specific changes from origin script",
+          "RESOURCE_GUARD: max_iterations, timeout_seconds"
+        ],
+        "MUST_NOT_INCLUDE": [
+          "final interpretation"
+        ]
+      },
+      "script.py": {
+        "MUST_BE": [
+          "runnable",
+          "aligned with the actual experiment",
+          "capable of producing measurable output",
+          "environment-aware (includes log of python version used)"
+        ],
+        "SOURCE_OF_TRUTH_RULE": "if a real root-level source file exists, prefer mapping or adapting it rather than rebuilding blindly"
+      },
+      "results_raw.txt": {
+        "ROLE": "primary numeric evidence file",
+        "RULES": [
+          "must contain ID Potency header",
+          "must contain env-metadata (which python, timestamp)",
+          "capture direct terminal or program output",
+          "do not hand-edit after capture",
+          "append or clearly version if rerunning intentionally"
+        ]
+      },
+      "results_observed.md": {
+        "ROLE": "observation only",
+        "ALLOWED": [
+          "activity changes",
+          "stabilization step",
+          "polarity balance",
+          "boundary effects",
+          "oscillations or cycles",
+          "convergence behavior",
+          "measured differences between conditions",
+          "bounded regions",
+          "counts and quantitative contrasts"
+        ],
+        "FORBIDDEN": [
+          "theory statements",
+          "interpretation of meaning",
+          "final conclusions"
+        ]
+      },
+      "conclusion.md": {
+        "ROLE": "interpretive and scientific meaning",
+        "MUST_INCLUDE": [
+          "what the results mean",
+          "whether the hypothesis is supported",
+          "whether the objective was met",
+          "DECISION field"
+        ],
+        "RULES": [
+          "must reference numerical evidence",
+          "must be grounded in results_observed.md and results_raw.txt"
+        ],
+        "DECISION_EXAMPLES": [
+          "PASS",
+          "FAIL",
+          "PASS FOR SESSION CONTINUATION",
+          "PASS WITH OPEN FRONTIER",
+          "INCONCLUSIVE"
+        ]
+      },
+      "linked_tests.md": {
+        "ROLE": "show the research chain",
+        "MAY_INCLUDE": [
+          "back links",
+          "forward links",
+          "prerequisite tests",
+          "follow-up tests",
+          "open frontier zones",
+          "related validation scripts"
+        ]
+      }
     },
     "EXECUTION_PROTOCOL": {
       "PRE_RUN": [
@@ -135,12 +291,164 @@
         "write conclusion.md",
         "update session-level scrolls",
         "PERFORM ATOMIC COMMIT TO MASTER SCROLL WITH MD5 HASH"
+      ],
+      "VERIFY_AFTER": [
+        "file creation",
+        "file replacement",
+        "script copy or mapping",
+        "execution",
+        "cleanup"
       ]
     },
-    "INTEGRITY_CHECK": [
+    "ENVIRONMENT_PROTOCOL": {
+      "DEFAULT": "protect system Python; use local virtual environment if dependencies are blocked or lab-specific",
+      "VENV_STEPS": [
+        "python3 -m venv .venv",
+        "source .venv/bin/activate",
+        "python -m pip install <dependency>"
+      ],
+      "RULE": "treat the local environment as lab infrastructure, not as optional decoration"
+    },
+    "SOURCE_OF_TRUTH_PROTOCOL": {
+      "PRINCIPLE": "original validated source beats reconstructed source",
+      "ORDER": [
+        "inventory real root-level scripts or source files",
+        "map them to session test folders",
+        "copy or adapt them into session script.py",
+        "only build new scripts when no valid source exists"
+      ],
+      "CAUTION": "do not silently invent historical code or outcomes"
+    },
+    "RECOVERY_PROTOCOL": {
+      "WHEN_USED": "when restoring a lab from continuity seeds, partial docs, or surviving scripts",
+      "ORDER": [
+        "pre-flight: verify connectivity and Nginx headers",
+        "confirm root path",
+        "confirm session tree",
+        "check which files are empty",
+        "populate session README",
+        "populate session master scroll",
+        "populate test documentation skeletons",
+        "inventory real scripts",
+        "map and copy source-of-truth scripts",
+        "validate script syntax",
+        "restore environment",
+        "run tests in canonical order",
+        "update observations and conclusions from actual output"
+      ],
+      "RECOVERY_HONESTY_RULE": "if a claimed past result is not reproduced in the recovered run, record the non-reproduction honestly and distinguish it from stronger follow-up validations"
+    },
+    "MASTER_SCROLL_PROTOCOL": {
+      "SESSION_MASTER_SCROLL.md": {
+        "ROLE": "top-level narrative + structural record of the session",
+        "SHOULD_INCLUDE": [
+          "session purpose",
+          "recovered continuity state if applicable",
+          "verified test order",
+          "findings summary",
+          "open investigation zones",
+          "follow-up validation notes",
+          "HASH_AUDIT_LOG: list of verified results_raw.txt hashes"
+        ]
+      },
+      "SESSION_README.md": {
+        "ROLE": "quick operational summary of the session",
+        "SHOULD_INCLUDE": [
+          "session ID",
+          "status",
+          "root path",
+          "core domain",
+          "active canon",
+          "main findings",
+          "open frontier",
+          "working protocol",
+          "next priority"
+        ]
+      },
+      "FINAL_SESSION_SUMMARY.md": {
+        "ROLE": "one-read summary for future continuation",
+        "SHOULD_INCLUDE": [
+          "recovery status",
+          "documentation protocol status",
+          "execution environment",
+          "source-of-truth mapping",
+          "test results summary",
+          "session-level conclusions",
+          "open frontiers",
+          "next recommended action"
+        ]
+      }
+    },
+    "RESEARCH_GOVERNANCE_RULES": {
+      "DO_NOT_PROMOTE_UNTIL_VALIDATED": true,
+      "FINAL_RULEBOOK_POLICY": "nothing enters final rulebooks until repeated validation is complete",
+      "OPEN_FRONTIER_POLICY": "interesting patterns may be logged as candidate structures or signals, but not declared laws prematurely",
+      "DISTINCTION_POLICY": [
+        "observed result",
+        "interpreted result",
+        "candidate pattern",
+        "validated rule"
+      ]
+    },
+    "CLEANUP_PROTOCOL": {
+      "RULE": "if duplicate notes or duplicated blocks appear, rewrite cleanly rather than appending more",
+      "VERIFY_WITH": [
+        "cat",
+        "tail",
+        "grep -n",
+        "sed -n"
+      ],
+      "GOAL": "keep the archive structurally clean and scientifically honest"
+    },
+    "LAB_LANGUAGE_RULES": {
+      "PREFERRED": [
+        "precise",
+        "simple",
+        "measured",
+        "path-aware"
+      ],
+      "AVOID": [
+        "overstating claims",
+        "mixing observation with theory",
+        "pretending conceptual graphics are raw evidence",
+        "calling something final before validation"
+      ]
+    },
+    "PORTABLE_CHECKLIST": [
+      "create root structure",
+      "create documentation protocol",
+      "create session folder",
+      "create test skeleton",
+      "write README/theory/test_design/linked_tests first",
+      "identify source-of-truth scripts",
+      "set up .venv if needed",
+      "run tests with tee into results_raw.txt",
+      "write results_observed from measurements only",
+      "write conclusion from numbers",
+      "update session scrolls",
+      "log open frontiers",
+      "promote nothing to final rulebook without repetition",
+      "Perform Phase 4 Hibernation Check"
+    ],
+    "COMPACT_FORMULA": {
+      "LAB_METHOD": "structure -> source-of-truth -> execute -> capture -> observe -> conclude -> scroll -> continue",
+      "EPISTEMIC_RULE": "words explain; numbers prove; repetition validates"
+    },
+    "INTEGRITY_CHECK_ANNEX": [
       "Check: which python (must be .venv)",
       "Check: md5sum results_raw.txt >> SESSION_MASTER_SCROLL.md",
       "Check: iteration_limit defined in script.py"
-    ]
+    ],
+    "VULNERABILITY_ANALYSIS_LOG": {
+      "DATA_INTEGRITY": "Risk of manual entry drift. Mitigation: MD5/SHA-256 Hash Rule per Atomic Commit.",
+      "ENV_SAFETY": "Risk of venv ghosting. Mitigation: Pre-flight 'which python' output in results header.",
+      "RESOURCE_SAFETY": "Risk of numerical overflow. Mitigation: Mandatory max_iterations/timeout Resource Guards."
+    },
+    "README_REQUIREMENTS_EXTERNAL": {
+      "PROJECT_IDENTITY": ["Project Name", "Conceptual Objective", "Status"],
+      "TECHNICAL_ARCHITECTURE": ["Core Components", "Logic Flow", "Dependencies"],
+      "SETUP": ["Prerequisites", "Single-Instruction Setup", "Env Variables"],
+      "VALIDATION": ["Test Suite", "Limiters", "Expected Outputs"]
+    }
   }
 }
