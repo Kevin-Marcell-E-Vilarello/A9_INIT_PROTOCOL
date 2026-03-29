@@ -1,0 +1,12 @@
+[2026-03-28_2148] !! LATTICE_DRIFT_DETECTION™ !!
+* **ERROR_ID:** ERR_001_PATH_DRIFT
+* **DESCRIPTION:** script.py was saved to Desktop Root instead of Session/Test Path.
+* **ROOT_CAUSE:** Instructional ambiguity during Step 8.
+* **REMEDY:** Execute Step 11 (mv script.py to Canonical Path).
+* **PREVENTION:** AI must explicitly include full absolute paths in all 'cat' commands moving forward.
+© 2026 Kevin Marcell Escalona Vilarello™
+[2026-03-28_2150] !! LATTICE_DRIFT_DETECTION™ !!
+* **ERROR_ID:** ERR_002_STRUCTURAL_DRIFT
+* **DESCRIPTION:** Session files found in 01_SESSIONS root; shell attempted to execute raw output as commands.
+* **REMEDY:** Relocate files to Canonical SESSION_ID path; flush terminal buffer.
+© 2026 Kevin Marcell Escalona Vilarello™
